@@ -11,21 +11,25 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import java.util.UUID;
 
+import ru.streamfest.guard.model.TicketLine;
+
 public class QRHandler {
 
+    private final Gson gson = new Gson();
     private final Context context;
     private RequestQueue queue;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<TicketLine> adapter;
     private AlertDialog dialog;
 
     private String BASE_URL ="http://sf.tagobar.ru";
 
     public QRHandler(Context context, ListView view) {
         this.context = context;
-        this.adapter = new ArrayAdapter<String>(context, R.layout.activity_main);
+        this.adapter = new TicketLineAdapter(context, R.layout.activity_main);
         view.setAdapter(adapter);
 
         // alert if something goes wrong
@@ -55,17 +59,26 @@ public class QRHandler {
         final String url = BASE_URL + "/api/checkin?code=" + qrCode;
         final StringRequest req = new StringRequest(Request.Method.GET, url,
             response -> {
-                // Display the first 500 characters of the response string.
-                adapter.add(response);
+                try {
+                    TicketLine tl = gson.fromJson(response, TicketLine.class);
+                    adapter.add(tl);
+                } catch (Throwable e) {
+                    final String msg = "Cannot parse server response!";
+                    QRHandler.this.dialog.setMessage(msg);
+                    QRHandler.this.dialog.show();
+                }
             },
             error -> {
-                final String msg = "The server is not available right now: " + error.getLocalizedMessage();
-                QRHandler.this.dialog.setMessage(msg);
+                final StringBuilder bld = new StringBuilder();
+                bld.append("Error in communication with server.");
+                if (error.getLocalizedMessage() != null) {
+                    bld.append(" Reason: ")
+                       .append(error.getLocalizedMessage());
+                }
+                QRHandler.this.dialog.setMessage(bld.toString());
                 QRHandler.this.dialog.show();
             }
         );
-
-        // Add the request to the RequestQueue.
         queue.add(req);
     }
 

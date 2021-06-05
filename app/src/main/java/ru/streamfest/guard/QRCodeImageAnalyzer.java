@@ -24,18 +24,15 @@ import static android.graphics.ImageFormat.YUV_444_888;
 
 public class QRCodeImageAnalyzer implements ImageAnalysis.Analyzer {
 
-    private static int SCAN_DELAY = 3000;
+    private static int SCAN_DELAY = 10000;
 
     private QRCodeFoundListener listener;
 
-    private LruCache<String, Long> cache = new LruCache<String, Long>(1);
+    private LruCache<String, Long> cache = new LruCache<String, Long>(10);
 
     public QRCodeImageAnalyzer(QRCodeFoundListener listener) {
         this.listener = listener;
     }
-
-
-
 
     @Override
     public void analyze(@NonNull ImageProxy image) {

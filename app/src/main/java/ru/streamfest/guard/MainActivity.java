@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Size;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         this.previewView = findViewById(R.id.activity_main_previewView);
         this.handler = new QRHandler(MainActivity.this, findViewById(R.id.activity_main_listView));
         this.cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         requestCamera();
     }
 
