@@ -20,10 +20,10 @@ public class TicketLineAdapter extends ArrayAdapter<TicketLine> {
 
     private final Context context;
 
-    private final int ENTRY_ALLOWED = 0;
-    private final int ENTRY_FORBIDDEN_NO_SUCH_TICKET = 1;
-    private final int ENTRY_FORBIDDEN_ENTRY_ATTEMPTS_EXCEEDED = 2;
-    private final int ENTRY_FORBIDDEN_ALREADY_ENTRERED_TODAY = 3;
+    private static final int ENTRY_ALLOWED = 0;
+    private static final int ENTRY_FORBIDDEN_NO_SUCH_TICKET = 1;
+    private static final int ENTRY_FORBIDDEN_ENTRY_ATTEMPTS_EXCEEDED = 2;
+    private static final int ENTRY_FORBIDDEN_ALREADY_ENTRERED_TODAY = 3;
 
     static class ViewHolder {
         private TextView firstLine;
@@ -68,19 +68,22 @@ public class TicketLineAdapter extends ArrayAdapter<TicketLine> {
                 case ENTRY_FORBIDDEN_NO_SUCH_TICKET:
                     final String err = "No such QR code!";
                     mViewHolder.secondLine.setText(err);
+                    break;
                 case ENTRY_FORBIDDEN_ALREADY_ENTRERED_TODAY:
                     final StringBuilder sb = new StringBuilder().append("Already cleared today!");
                     if (details != null && details.getCheckinLast() != null) {
                         sb.append(" At ").append(details.getCheckinLast());
                     }
                     mViewHolder.secondLine.setText(sb.toString());
+                    break;
                 case ENTRY_FORBIDDEN_ENTRY_ATTEMPTS_EXCEEDED:
                     final StringBuilder sb1 = new StringBuilder().append("Maximum entry count reached!");
                     if (details != null) {
                         sb1.append(" Attempted: ").append(details.getCheckinCount())
                            .append(" Allowed: ").append(details.getDaysQty());
                     }
-                    mViewHolder.secondLine.setText("Maximum entry count reached!");
+                    mViewHolder.secondLine.setText(sb1);
+                    break;
             }
             mViewHolder.icon.setImageResource(android.R.drawable.ic_delete);
         }

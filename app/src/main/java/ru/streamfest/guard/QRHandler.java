@@ -54,8 +54,7 @@ public class QRHandler {
     }
 
     // Instantiate the RequestQueue.
-    public void req(String UNUSED_CODE) {
-        final String qrCode = UUID.randomUUID().toString();
+    public void req(String qrCode) {
         final String url = BASE_URL + "/api/checkin?code=" + qrCode;
         final StringRequest req = new StringRequest(Request.Method.GET, url,
             response -> {
