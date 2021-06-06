@@ -60,7 +60,7 @@ public class QRHandler {
             response -> {
                 try {
                     TicketLine tl = gson.fromJson(response, TicketLine.class);
-                    adapter.add(tl);
+                    adapter.insert(tl, 0);
                 } catch (Throwable e) {
                     final String msg = "Cannot parse server response!";
                     QRHandler.this.dialog.setMessage(msg);

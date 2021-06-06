@@ -20,6 +20,9 @@ public class TicketLineAdapter extends ArrayAdapter<TicketLine> {
 
     private final Context context;
 
+    private static final int GREEN  = 0xFF009900;
+    private static final int RED    = 0xFF990000;
+
     private static final int ENTRY_ALLOWED = 0;
     private static final int ENTRY_FORBIDDEN_NO_SUCH_TICKET = 1;
     private static final int ENTRY_FORBIDDEN_ENTRY_ATTEMPTS_EXCEEDED = 2;
@@ -55,26 +58,44 @@ public class TicketLineAdapter extends ArrayAdapter<TicketLine> {
         final TicketLine data = getItem(position);
         TicketDetails details = data.getDetails();
         if (details != null) {
-            mViewHolder.firstLine.setText(details.getOrderId());
+            StringBuilder sb = new StringBuilder();
+            sb.append(details.getOrderId())
+                .append(" | ")
+                .append(details.getOrderEmail())
+                .append(" | ")
+                .append(details.getDaysQty())
+                .append(" days");
+            if (details.getStreamer() != null) {
+                sb
+                    .append(" | from ")
+                    .append(details.getStreamer());
+            }
+            mViewHolder.secondLine.setText(sb.toString());
         }
         if (data.getStatus() == ENTRY_ALLOWED) {
-            mViewHolder.firstLine.setTextColor(Color.GREEN);
-            mViewHolder.secondLine.setTextColor(Color.GREEN);
+            mViewHolder.firstLine.setTextColor(GREEN);
+            mViewHolder.secondLine.setTextColor(GREEN);
             mViewHolder.icon.setImageResource(android.R.drawable.ic_input_add);
+            mViewHolder.firstLine.setText("Cleared for entry.");
         } else {
-            mViewHolder.firstLine.setTextColor(Color.RED);
-            mViewHolder.secondLine.setTextColor(Color.RED);
+            mViewHolder.firstLine.setTextColor(RED);
+            mViewHolder.secondLine.setTextColor(RED);
             switch (data.getStatus()) {
                 case ENTRY_FORBIDDEN_NO_SUCH_TICKET:
                     final String err = "No such QR code!";
-                    mViewHolder.secondLine.setText(err);
+                    mViewHolder.firstLine.setText(err);
                     break;
                 case ENTRY_FORBIDDEN_ALREADY_ENTRERED_TODAY:
                     final StringBuilder sb = new StringBuilder().append("Already cleared today!");
                     if (details != null && details.getCheckinLast() != null) {
-                        sb.append(" At ").append(details.getCheckinLast());
+                        int start = details.getCheckinLast().indexOf('T');
+                        int end = details.getCheckinLast().indexOf('.');
+                        if (start >= 0 && end >= 0 && start < end) {
+                            String time = details.getCheckinLast().substring(start + 1, end);
+                            sb.append(" At ").append(time);
+                        }
                     }
-                    mViewHolder.secondLine.setText(sb.toString());
+                    mViewHolder.firstLine.setText(sb.toString());
                     break;
                 case ENTRY_FORBIDDEN_ENTRY_ATTEMPTS_EXCEEDED:
                     final StringBuilder sb1 = new StringBuilder().append("Maximum entry count reached!");
@@ -82,7 +103,7 @@ public class TicketLineAdapter extends ArrayAdapter<TicketLine> {
                         sb1.append(" Attempted: ").append(details.getCheckinCount())
                            .append(" Allowed: ").append(details.getDaysQty());
                     }
-                    mViewHolder.secondLine.setText(sb1);
+                    mViewHolder.firstLine.setText(sb1);
                     break;
             }
             mViewHolder.icon.setImageResource(android.R.drawable.ic_delete);
