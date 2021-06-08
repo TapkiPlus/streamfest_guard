@@ -59,7 +59,6 @@ public class QRCodeImageAnalyzer implements ImageAnalysis.Analyzer {
                 if (cached == null || now - cached > SCAN_DELAY) {
                     cache.put(text, now);
                     listener.onQRCodeFound(text);
-                    Log.w(getClass().getSimpleName(), "Result: " + text);
                 }
             } catch (FormatException | ChecksumException | NotFoundException e) {
                 listener.qrCodeNotFound();
