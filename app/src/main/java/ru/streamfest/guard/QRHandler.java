@@ -3,7 +3,6 @@ package ru.streamfest.guard;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -12,8 +11,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-
-import java.util.UUID;
 
 import ru.streamfest.guard.model.TicketLine;
 
@@ -69,13 +66,10 @@ public class QRHandler {
             },
             error -> {
                 final StringBuilder bld = new StringBuilder();
-                bld.append("Error in communication with server.");
                 if (error.getLocalizedMessage() != null) {
                     bld.append(" Reason: ")
                        .append(error.getLocalizedMessage());
                 }
-                QRHandler.this.dialog.setMessage(bld.toString());
-                QRHandler.this.dialog.show();
             }
         );
         queue.add(req);

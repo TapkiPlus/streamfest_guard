@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Streamfest guard</string>
+    <string name="access_granted">Cleared for entry.</string>
+    <string name="access_denied_no_such_code">No such QR code!</string>
 </resources>

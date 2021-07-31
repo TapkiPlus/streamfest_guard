@@ -17,8 +17,8 @@ public class TicketDetails {
     @SerializedName("order_phone")
     String orderPhone;
 
-    @SerializedName("days_qty")
-    int daysQty;
+    @SerializedName("ticket_type")
+    int ticketType;
 
     @SerializedName("streamer")
     String streamer;
@@ -45,8 +45,8 @@ public class TicketDetails {
         return orderPhone;
     }
 
-    public int getDaysQty() {
-        return daysQty;
+    public int getTicketType() {
+        return ticketType;
     }
 
     public String getStreamer() {
