@@ -22,7 +22,7 @@ public class QRHandler {
     private ArrayAdapter<TicketLine> adapter;
     private AlertDialog dialog;
 
-    private String BASE_URL ="http://sf.tagobar.ru";
+    private String BASE_URL ="https://streamfest.ru";
 
     public QRHandler(Context context, ListView view) {
         this.context = context;

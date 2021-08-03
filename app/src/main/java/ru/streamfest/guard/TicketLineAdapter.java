@@ -1,6 +1,11 @@
 package ru.streamfest.guard;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.media.ToneGenerator;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +25,6 @@ public class TicketLineAdapter extends ArrayAdapter<TicketLine> {
 
     private static final int GREEN  = 0xFF009900;
     private static final int RED    = 0xFF990000;
-    private static final int BLACK  = 0xFF000000;
 
     private static final int ENTRY_ALLOWED = 0;
     private static final int ENTRY_FORBIDDEN_NO_SUCH_TICKET = 1;
